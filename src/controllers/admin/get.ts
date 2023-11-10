@@ -17,17 +17,13 @@ const adminGetController = async (req: Request, res: Response) => {
                       OR: [
                         { username: req.body.key },
                         {
-                          User: { UserInformation: { lastName: req.body.key } },
+                          User: { lastName: req.body.key },
                         },
                         {
-                          User: {
-                            UserInformation: { firstName: req.body.key },
-                          },
+                          User: { firstName: req.body.key },
                         },
                         {
-                          User: {
-                            UserInformation: { middleName: req.body.key },
-                          },
+                          User: { middleName: req.body.key },
                         },
                       ],
                     }

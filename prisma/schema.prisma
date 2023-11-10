@@ -10,6 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id         String        @id @default(uuid())
+  username   String        @unique @default(uuid()) @db.VarChar(255)
+  password   String?       @db.VarChar(255)
+  status     AccountStatus @default(unverified)
+  User       User?         @relation(fields: [userId], references: [id])
+  userId     String        @unique
+  AccountLog AccountLog[]
+}
+
+model AccountLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Account    Account? @relation(fields: [accountId], references: [id])
+  accountId  String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
 model Admin {
   id       String     @id @default(uuid())
   username String     @unique @db.VarChar(255)
@@ -335,32 +356,37 @@ model TaskAssigneeLog {
 }
 
 model User {
-  id                         String               @id @default(uuid())
-  username                   String               @unique @default(uuid()) @db.VarChar(255)
-  password                   String?              @db.VarChar(255)
-  status                     AccountStatus        @default(unverified)
-  Admin                      Admin?
-  Customer                   Customer?
-  Email                      Email[]
-  Simcard                    Simcard[]
-  TaskAssignee               TaskAssignee[]
-  UserInformation            UserInformation?
-  UserLog                    UserLog[]
-  AdminLogOperator           AdminLog[]           @relation("Operator")
-  CustomerLogOperator        CustomerLog[]        @relation("Operator")
-  EmailLogOperator           EmailLog[]           @relation("Operator")
-  EventLogOperator           EventLog[]           @relation("Operator")
-  EventSupplyLogOperator     EventSupplyLog[]     @relation("Operator")
-  OrderLogOperator           OrderLog[]           @relation("Operator")
-  OrderSupplyLogOperator     OrderSupplyLog[]     @relation("Operator")
-  PaymentLogOperator         PaymentLog[]         @relation("Operator")
-  SimcardLogOperator         SimcardLog[]         @relation("Operator")
-  SupplierLogOperator        SupplierLog[]        @relation("Operator")
-  SupplyLogOperator          SupplyLog[]          @relation("Operator")
-  TaskLogOperator            TaskLog[]            @relation("Operator")
-  TaskAssigneeLogOperator    TaskAssigneeLog[]    @relation("Operator")
-  UserLogOperator            UserLog[]            @relation("Operator")
-  UserInformationLogOperator UserInformationLog[] @relation("Operator")
+  id                      String            @id @default(uuid())
+  username                String            @unique @default(uuid()) @db.VarChar(255)
+  password                String?           @db.VarChar(255)
+  lastName                String            @db.VarChar(255)
+  firstName               String            @db.VarChar(255)
+  middleName              String?           @db.VarChar(255)
+  suffix                  String?           @db.VarChar(255)
+  gender                  Gender
+  birthDate               DateTime          @db.Date
+  Account                 Account?
+  Admin                   Admin?
+  Customer                Customer?
+  Email                   Email[]
+  Simcard                 Simcard[]
+  TaskAssignee            TaskAssignee[]
+  UserLog                 UserLog[]
+  AccountLogOperator      AccountLog[]      @relation("Operator")
+  AdminLogOperator        AdminLog[]        @relation("Operator")
+  CustomerLogOperator     CustomerLog[]     @relation("Operator")
+  EmailLogOperator        EmailLog[]        @relation("Operator")
+  EventLogOperator        EventLog[]        @relation("Operator")
+  EventSupplyLogOperator  EventSupplyLog[]  @relation("Operator")
+  OrderLogOperator        OrderLog[]        @relation("Operator")
+  OrderSupplyLogOperator  OrderSupplyLog[]  @relation("Operator")
+  PaymentLogOperator      PaymentLog[]      @relation("Operator")
+  SimcardLogOperator      SimcardLog[]      @relation("Operator")
+  SupplierLogOperator     SupplierLog[]     @relation("Operator")
+  SupplyLogOperator       SupplyLog[]       @relation("Operator")
+  TaskLogOperator         TaskLog[]         @relation("Operator")
+  TaskAssigneeLogOperator TaskAssigneeLog[] @relation("Operator")
+  UserLogOperator         UserLog[]         @relation("Operator")
 }
 
 model UserLog {
@@ -372,30 +398,6 @@ model UserLog {
   userId     String?
   Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
   operatorId String?
-}
-
-model UserInformation {
-  id                 String               @id @default(uuid())
-  lastName           String               @db.VarChar(255)
-  firstName          String               @db.VarChar(255)
-  middleName         String?              @db.VarChar(255)
-  suffix             String?              @db.VarChar(255)
-  gender             Gender
-  birthDate          DateTime             @db.Date
-  User               User?                @relation(fields: [userId], references: [id])
-  userId             String               @unique
-  UserInformationLog UserInformationLog[]
-}
-
-model UserInformationLog {
-  id                String           @id @default(uuid())
-  datetime          DateTime         @default(now())
-  type              String           @db.VarChar(255)
-  content           Json             @db.Json
-  UserInformation   UserInformation? @relation(fields: [userInformationId], references: [id])
-  userInformationId String?
-  Operator          User?            @relation("Operator", fields: [operatorId], references: [id])
-  operatorId        String?
 }
 
 enum Gender {

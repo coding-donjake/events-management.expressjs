@@ -1,3 +1,3 @@
-const adminOrderByConstant: object = [{ username: "asc" }];
+const accountOrderByConstant: object = [{ username: "asc" }];
 
-export default adminOrderByConstant;
+export default accountOrderByConstant;

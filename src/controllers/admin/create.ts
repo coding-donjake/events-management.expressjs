@@ -6,25 +6,13 @@ const prisma: PrismaClient = new PrismaClient();
 
 const adminCreateController = async (req: Request, res: Response) => {
   try {
-    const user = await prisma.user.create({ data: {} });
+    const user = await prisma.user.create({ data: req.body.user });
     await prisma.userLog.create({
       data: {
         type: "create",
         userId: user.id,
         operatorId: req.body.decodedToken.id,
         content: user,
-      },
-    });
-    req.body.userInformation.userId = user.id;
-    const userInformation = await prisma.userInformation.create({
-      data: req.body.userInformation,
-    });
-    await prisma.userInformationLog.create({
-      data: {
-        type: "create",
-        userInformationId: userInformation.id,
-        operatorId: req.body.decodedToken.id,
-        content: userInformation,
       },
     });
     req.body.admin.userId = user.id;

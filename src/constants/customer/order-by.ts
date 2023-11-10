@@ -1,25 +1,7 @@
 const customerOrderByConstant: object = [
-  {
-    User: {
-      UserInformation: {
-        lastName: "asc",
-      },
-    },
-  },
-  {
-    User: {
-      UserInformation: {
-        firstName: "asc",
-      },
-    },
-  },
-  {
-    User: {
-      UserInformation: {
-        middleName: "asc",
-      },
-    },
-  },
+  { User: { lastName: "asc" } },
+  { User: { firstName: "asc" } },
+  { User: { middleName: "asc" } },
 ];
 
 export default customerOrderByConstant;

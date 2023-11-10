@@ -1,5 +1,5 @@
 export const adminSeed = {
-  userInformation: {
+  user: {
     lastName: "Doe",
     firstName: "John",
     gender: "male",

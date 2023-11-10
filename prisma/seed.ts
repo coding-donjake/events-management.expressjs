@@ -6,12 +6,7 @@ const prisma = new PrismaClient();
 
 let main = async () => {
   // creating User
-  const user = await prisma.user.create({ data: { status: "ok" } });
-  // creating UserInformation
-  adminSeed.userInformation.userId = user.id;
-  const userInformation = await prisma.userInformation.create({
-    data: adminSeed.userInformation as any,
-  });
+  const user = await prisma.user.create({ data: adminSeed.user as any });
   // creating Admin
   adminSeed.admin.userId = user.id;
   adminSeed.admin.password = await hashPassword(adminSeed.admin.password);

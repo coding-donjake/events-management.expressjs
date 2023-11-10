@@ -24,21 +24,21 @@ const eventGetController = async (req: Request, res: Response) => {
                         {
                           Customer: {
                             User: {
-                              UserInformation: { lastName: req.body.key },
+                              lastName: req.body.key,
                             },
                           },
                         },
                         {
                           Customer: {
                             User: {
-                              UserInformation: { firstName: req.body.key },
+                              firstName: req.body.key,
                             },
                           },
                         },
                         {
                           Customer: {
                             User: {
-                              UserInformation: { middleName: req.body.key },
+                              middleName: req.body.key,
                             },
                           },
                         },

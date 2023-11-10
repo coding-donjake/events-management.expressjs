@@ -16,17 +16,13 @@ const customerGetController = async (req: Request, res: Response) => {
                   ? {
                       OR: [
                         {
-                          User: { UserInformation: { lastName: req.body.key } },
+                          User: { lastName: req.body.key },
                         },
                         {
-                          User: {
-                            UserInformation: { firstName: req.body.key },
-                          },
+                          User: { firstName: req.body.key },
                         },
                         {
-                          User: {
-                            UserInformation: { middleName: req.body.key },
-                          },
+                          User: { middleName: req.body.key },
                         },
                       ],
                     }

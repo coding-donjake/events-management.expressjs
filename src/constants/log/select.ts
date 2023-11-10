@@ -9,23 +9,25 @@ const logConstant: object = {
     Operator: {
       select: {
         id: true,
-        username: true,
-        status: true,
-        Admin: {
+        lastName: true,
+        firstName: true,
+        middleName: true,
+        suffix: true,
+        gender: true,
+        birthDate: true,
+        Account: {
           select: {
+            id: true,
             username: true,
-            role: true,
             status: true,
           },
         },
-        UserInformation: {
+        Admin: {
           select: {
-            lastName: true,
-            firstName: true,
-            middleName: true,
-            suffix: true,
-            gender: true,
-            birthDate: true,
+            id: true,
+            username: true,
+            role: true,
+            status: true,
           },
         },
       },

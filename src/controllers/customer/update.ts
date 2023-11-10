@@ -19,20 +19,6 @@ const customerUpdateController = async (req: Request, res: Response) => {
         },
       });
     }
-    if (req.body.userInformation) {
-      prisma.userInformation.update({
-        where: { id: req.body.userInformation.id },
-        data: req.body.userInformation,
-      });
-      await prisma.userInformationLog.create({
-        data: {
-          type: "update",
-          userInformationId: req.body.userInformation.id,
-          operatorId: req.body.decodedToken.id,
-          content: req.body.userInformation,
-        },
-      });
-    }
     if (req.body.customer) {
       prisma.customer.update({
         where: { id: req.body.customer.id },
