@@ -1,0 +1,424 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String     @id @default(uuid())
+  username String     @unique @db.VarChar(255)
+  password String     @db.VarChar(255)
+  role     AdminRole
+  status   OkRemoved  @default(ok)
+  User     User?      @relation(fields: [userId], references: [id])
+  userId   String     @unique
+  AdminLog AdminLog[]
+}
+
+model AdminLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Admin      Admin?   @relation(fields: [adminId], references: [id])
+  adminId    String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+enum AdminRole {
+  developer
+  owner
+  admin
+  staff
+}
+
+model Customer {
+  id          String        @id @default(uuid())
+  address     String        @db.Text
+  status      OkRemoved     @default(ok)
+  Email       Email?
+  Event       Event[]
+  Simcard     Simcard?
+  User        User?         @relation(fields: [userId], references: [id])
+  userId      String        @unique
+  CustomerLog CustomerLog[]
+}
+
+model CustomerLog {
+  id         String    @id @default(uuid())
+  datetime   DateTime  @default(now())
+  type       String    @db.VarChar(255)
+  content    Json      @db.Json
+  Customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+  Operator   User?     @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Email {
+  id         String     @id @default(uuid())
+  content    String     @unique @db.VarChar(255)
+  domain     String     @db.VarChar(255)
+  main       Main       @default(no)
+  status     OkRemoved  @default(ok)
+  Customer   Customer?  @relation(fields: [customerId], references: [id])
+  customerId String     @unique
+  User       User?      @relation(fields: [userId], references: [id])
+  userId     String?
+  EmailLog   EmailLog[]
+}
+
+model EmailLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Email      Email?   @relation(fields: [emailId], references: [id])
+  emailId    String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Event {
+  id              String        @id @default(uuid())
+  datetimeStarted DateTime
+  datetimeEnded   DateTime?
+  type            String        @db.VarChar(255)
+  name            String        @db.VarChar(255)
+  address         String        @db.Text
+  price           Float
+  balance         Float
+  status          EventStatus   @default(ok)
+  Customer        Customer?     @relation(fields: [customerId], references: [id])
+  customerId      String?
+  EventSupply     EventSupply[]
+  Payment         Payment[]
+  Task            Task[]
+  EventLog        EventLog[]
+}
+
+model EventLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Event      Event?   @relation(fields: [eventId], references: [id])
+  eventId    String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+enum EventStatus {
+  ok
+  completed
+  unpaid
+  removed
+}
+
+model EventSupply {
+  id             String           @id @default(uuid())
+  quantity       Int
+  status         OkRemoved        @default(ok)
+  Event          Event?           @relation(fields: [eventId], references: [id])
+  eventId        String?
+  Supply         Supply?          @relation(fields: [supplyId], references: [id])
+  supplyId       String?
+  EventSupplyLog EventSupplyLog[]
+}
+
+model EventSupplyLog {
+  id            String       @id @default(uuid())
+  datetime      DateTime     @default(now())
+  type          String       @db.VarChar(255)
+  content       Json         @db.Json
+  EventSupply   EventSupply? @relation(fields: [eventSupplyId], references: [id])
+  eventSupplyId String?
+  Operator      User?        @relation("Operator", fields: [operatorId], references: [id])
+  operatorId    String?
+}
+
+model Order {
+  id               String        @id @default(uuid())
+  datetimeOrdered  DateTime
+  datetimeExpected DateTime?
+  datetimeArrived  DateTime?
+  status           OrderStatus   @default(ok)
+  OrderSupply      OrderSupply[]
+  Supplier         Supplier?     @relation(fields: [supplierId], references: [id])
+  supplierId       String?
+  OrderLog         OrderLog[]
+}
+
+model OrderLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Order      Order?   @relation(fields: [orderId], references: [id])
+  orderId    String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+enum OrderStatus {
+  ok
+  arrived
+  removed
+}
+
+model OrderSupply {
+  id             String           @id @default(uuid())
+  quantity       Int
+  status         OkRemoved        @default(ok)
+  Order          Order?           @relation(fields: [orderId], references: [id])
+  orderId        String?
+  Supply         Supply?          @relation(fields: [supplyId], references: [id])
+  supplyId       String?
+  OrderSupplyLog OrderSupplyLog[]
+}
+
+model OrderSupplyLog {
+  id            String       @id @default(uuid())
+  datetime      DateTime     @default(now())
+  type          String       @db.VarChar(255)
+  content       Json         @db.Json
+  OrderSupply   OrderSupply? @relation(fields: [orderSupplyId], references: [id])
+  orderSupplyId String?
+  Operator      User?        @relation("Operator", fields: [operatorId], references: [id])
+  operatorId    String?
+}
+
+model Payment {
+  id              String       @id @default(uuid())
+  datetimePayment DateTime     @default(now()) @db.DateTime()
+  amount          Float
+  status          OkRemoved    @default(ok)
+  Event           Event?       @relation(fields: [eventId], references: [id])
+  eventId         String?
+  PaymentLog      PaymentLog[]
+}
+
+model PaymentLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Payment    Payment? @relation(fields: [paymentId], references: [id])
+  paymentId  String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Simcard {
+  id         String       @id @default(uuid())
+  content    String       @unique @db.VarChar(255)
+  idc        String       @db.VarChar(255)
+  main       Main         @default(no)
+  status     OkRemoved    @default(ok)
+  Customer   Customer?    @relation(fields: [customerId], references: [id])
+  customerId String       @unique
+  User       User?        @relation(fields: [userId], references: [id])
+  userId     String?
+  SimcardLog SimcardLog[]
+}
+
+model SimcardLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Simcard    Simcard? @relation(fields: [simcardId], references: [id])
+  simcardId  String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Supplier {
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(255)
+  address     String        @db.Text
+  phone       String        @db.VarChar(255)
+  email       String        @db.VarChar(255)
+  status      OkRemoved     @default(ok)
+  Order       Order[]
+  SupplierLog SupplierLog[]
+}
+
+model SupplierLog {
+  id         String    @id @default(uuid())
+  datetime   DateTime  @default(now())
+  type       String    @db.VarChar(255)
+  content    Json      @db.Json
+  Supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  supplierId String?
+  Operator   User?     @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Supply {
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(255)
+  brand       String        @db.VarChar(255)
+  type        String        @db.VarChar(255)
+  stock       Int?          @default(0)
+  status      OkRemoved     @default(ok)
+  EventSupply EventSupply[]
+  OrderSupply OrderSupply[]
+  SupplyLog   SupplyLog[]
+}
+
+model SupplyLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Supply     Supply?  @relation(fields: [supplyId], references: [id])
+  supplyId   String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model Task {
+  id               String         @id @default(uuid())
+  datetimeDeadline DateTime
+  name             String         @db.VarChar(255)
+  status           TaskStatus     @default(ok)
+  Event            Event?         @relation(fields: [eventId], references: [id])
+  eventId          String?
+  TaskAssignee     TaskAssignee[]
+  TaskLog          TaskLog[]
+}
+
+model TaskLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  Task       Task?    @relation(fields: [taskId], references: [id])
+  taskId     String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+enum TaskStatus {
+  ok
+  completed
+  removed
+}
+
+model TaskAssignee {
+  id              String            @id @default(uuid())
+  status          OkRemoved         @default(ok)
+  Task            Task?             @relation(fields: [taskId], references: [id])
+  taskId          String?
+  User            User?             @relation(fields: [userId], references: [id])
+  userId          String?
+  TaskAssigneeLog TaskAssigneeLog[]
+}
+
+model TaskAssigneeLog {
+  id             String        @id @default(uuid())
+  datetime       DateTime      @default(now())
+  type           String        @db.VarChar(255)
+  content        Json          @db.Json
+  TaskAssignee   TaskAssignee? @relation(fields: [taskAssigneeId], references: [id])
+  taskAssigneeId String?
+  Operator       User?         @relation("Operator", fields: [operatorId], references: [id])
+  operatorId     String?
+}
+
+model User {
+  id                         String               @id @default(uuid())
+  username                   String               @unique @default(uuid()) @db.VarChar(255)
+  password                   String?              @db.VarChar(255)
+  status                     AccountStatus        @default(unverified)
+  Admin                      Admin?
+  Customer                   Customer?
+  Email                      Email[]
+  Simcard                    Simcard[]
+  TaskAssignee               TaskAssignee[]
+  UserInformation            UserInformation?
+  UserLog                    UserLog[]
+  AdminLogOperator           AdminLog[]           @relation("Operator")
+  CustomerLogOperator        CustomerLog[]        @relation("Operator")
+  EmailLogOperator           EmailLog[]           @relation("Operator")
+  EventLogOperator           EventLog[]           @relation("Operator")
+  EventSupplyLogOperator     EventSupplyLog[]     @relation("Operator")
+  OrderLogOperator           OrderLog[]           @relation("Operator")
+  OrderSupplyLogOperator     OrderSupplyLog[]     @relation("Operator")
+  PaymentLogOperator         PaymentLog[]         @relation("Operator")
+  SimcardLogOperator         SimcardLog[]         @relation("Operator")
+  SupplierLogOperator        SupplierLog[]        @relation("Operator")
+  SupplyLogOperator          SupplyLog[]          @relation("Operator")
+  TaskLogOperator            TaskLog[]            @relation("Operator")
+  TaskAssigneeLogOperator    TaskAssigneeLog[]    @relation("Operator")
+  UserLogOperator            UserLog[]            @relation("Operator")
+  UserInformationLogOperator UserInformationLog[] @relation("Operator")
+}
+
+model UserLog {
+  id         String   @id @default(uuid())
+  datetime   DateTime @default(now())
+  type       String   @db.VarChar(255)
+  content    Json     @db.Json
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String?
+  Operator   User?    @relation("Operator", fields: [operatorId], references: [id])
+  operatorId String?
+}
+
+model UserInformation {
+  id                 String               @id @default(uuid())
+  lastName           String               @db.VarChar(255)
+  firstName          String               @db.VarChar(255)
+  middleName         String?              @db.VarChar(255)
+  suffix             String?              @db.VarChar(255)
+  gender             Gender
+  birthDate          DateTime             @db.Date
+  User               User?                @relation(fields: [userId], references: [id])
+  userId             String               @unique
+  UserInformationLog UserInformationLog[]
+}
+
+model UserInformationLog {
+  id                String           @id @default(uuid())
+  datetime          DateTime         @default(now())
+  type              String           @db.VarChar(255)
+  content           Json             @db.Json
+  UserInformation   UserInformation? @relation(fields: [userInformationId], references: [id])
+  userInformationId String?
+  Operator          User?            @relation("Operator", fields: [operatorId], references: [id])
+  operatorId        String?
+}
+
+enum Gender {
+  male
+  female
+}
+
+// global enums
+
+enum AccountStatus {
+  unverified
+  ok
+  deactivated
+  suspended
+  removed
+}
+
+enum Main {
+  yes
+  no
+}
+
+enum OkRemoved {
+  ok
+  removed
+}

@@ -1,0 +1,41 @@
+import { PrismaClient } from "@prisma/client";
+import { Request, Response } from "express";
+import taskSelectConstant from "../../constants/task/select";
+import taskOrderByConstant from "../../constants/task/order-by";
+
+const prisma: PrismaClient = new PrismaClient();
+
+const taskGetController = async (req: Request, res: Response) => {
+  try {
+    let result = await prisma.task.findMany({
+      where:
+        req.body.key || req.body.status
+          ? {
+              AND: [
+                req.body.key
+                  ? {
+                      OR: [
+                        {
+                          Event: {
+                            name: req.body.key,
+                          },
+                        },
+                      ],
+                    }
+                  : {},
+                req.body.status ? { status: req.body.status } : {},
+              ],
+            }
+          : {},
+      orderBy: taskOrderByConstant,
+      select: taskSelectConstant,
+    });
+    if (!result) return res.status(400).send();
+    res.status(200).json({ data: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: error });
+  }
+};
+
+export default taskGetController;
