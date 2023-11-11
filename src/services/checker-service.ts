@@ -8,11 +8,6 @@ export const checkAdminUsernameAvailability = async (
   res: Response,
   next: NextFunction
 ) => {
-  /**
-   * This function will check of the username is available to use in admin registration.
-   *
-   * If the username is taken, it will return 409 (Resource Conflict).
-   */
   const exists = await prisma.admin.findUnique({
     where: {
       username: req.body.admin.username,

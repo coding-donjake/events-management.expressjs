@@ -32,13 +32,13 @@ model AccountLog {
 }
 
 model Admin {
-  id       String     @id @default(uuid())
-  username String     @unique @db.VarChar(255)
-  password String     @db.VarChar(255)
+  id       String        @id @default(uuid())
+  username String        @unique @db.VarChar(255)
+  password String        @db.VarChar(255)
   role     AdminRole
-  status   OkRemoved  @default(ok)
-  User     User?      @relation(fields: [userId], references: [id])
-  userId   String     @unique
+  status   ActiveRemoved @default(active)
+  User     User?         @relation(fields: [userId], references: [id])
+  userId   String        @unique
   AdminLog AdminLog[]
 }
 
@@ -63,7 +63,7 @@ enum AdminRole {
 model Customer {
   id          String        @id @default(uuid())
   address     String        @db.Text
-  status      OkRemoved     @default(ok)
+  status      ActiveRemoved @default(active)
   Email       Email?
   Event       Event[]
   Simcard     Simcard?
@@ -84,14 +84,14 @@ model CustomerLog {
 }
 
 model Email {
-  id         String     @id @default(uuid())
-  content    String     @unique @db.VarChar(255)
-  domain     String     @db.VarChar(255)
-  main       Main       @default(no)
-  status     OkRemoved  @default(ok)
-  Customer   Customer?  @relation(fields: [customerId], references: [id])
-  customerId String     @unique
-  User       User?      @relation(fields: [userId], references: [id])
+  id         String        @id @default(uuid())
+  content    String        @unique @db.VarChar(255)
+  domain     String        @db.VarChar(255)
+  main       Main          @default(no)
+  status     ActiveRemoved @default(active)
+  Customer   Customer?     @relation(fields: [customerId], references: [id])
+  customerId String        @unique
+  User       User?         @relation(fields: [userId], references: [id])
   userId     String?
   EmailLog   EmailLog[]
 }
@@ -116,7 +116,7 @@ model Event {
   address         String        @db.Text
   price           Float
   balance         Float
-  status          EventStatus   @default(ok)
+  status          EventStatus   @default(active)
   Customer        Customer?     @relation(fields: [customerId], references: [id])
   customerId      String?
   EventSupply     EventSupply[]
@@ -137,7 +137,7 @@ model EventLog {
 }
 
 enum EventStatus {
-  ok
+  active
   completed
   unpaid
   removed
@@ -146,7 +146,7 @@ enum EventStatus {
 model EventSupply {
   id             String           @id @default(uuid())
   quantity       Int
-  status         OkRemoved        @default(ok)
+  status         ActiveRemoved    @default(active)
   Event          Event?           @relation(fields: [eventId], references: [id])
   eventId        String?
   Supply         Supply?          @relation(fields: [supplyId], references: [id])
@@ -170,7 +170,7 @@ model Order {
   datetimeOrdered  DateTime
   datetimeExpected DateTime?
   datetimeArrived  DateTime?
-  status           OrderStatus   @default(ok)
+  status           OrderStatus   @default(active)
   OrderSupply      OrderSupply[]
   Supplier         Supplier?     @relation(fields: [supplierId], references: [id])
   supplierId       String?
@@ -189,7 +189,7 @@ model OrderLog {
 }
 
 enum OrderStatus {
-  ok
+  active
   arrived
   removed
 }
@@ -197,7 +197,7 @@ enum OrderStatus {
 model OrderSupply {
   id             String           @id @default(uuid())
   quantity       Int
-  status         OkRemoved        @default(ok)
+  status         ActiveRemoved    @default(active)
   Order          Order?           @relation(fields: [orderId], references: [id])
   orderId        String?
   Supply         Supply?          @relation(fields: [supplyId], references: [id])
@@ -217,11 +217,11 @@ model OrderSupplyLog {
 }
 
 model Payment {
-  id              String       @id @default(uuid())
-  datetimePayment DateTime     @default(now()) @db.DateTime()
+  id              String        @id @default(uuid())
+  datetimePayment DateTime      @default(now()) @db.DateTime()
   amount          Float
-  status          OkRemoved    @default(ok)
-  Event           Event?       @relation(fields: [eventId], references: [id])
+  status          ActiveRemoved @default(active)
+  Event           Event?        @relation(fields: [eventId], references: [id])
   eventId         String?
   PaymentLog      PaymentLog[]
 }
@@ -238,14 +238,14 @@ model PaymentLog {
 }
 
 model Simcard {
-  id         String       @id @default(uuid())
-  content    String       @unique @db.VarChar(255)
-  idc        String       @db.VarChar(255)
-  main       Main         @default(no)
-  status     OkRemoved    @default(ok)
-  Customer   Customer?    @relation(fields: [customerId], references: [id])
-  customerId String       @unique
-  User       User?        @relation(fields: [userId], references: [id])
+  id         String        @id @default(uuid())
+  content    String        @unique @db.VarChar(255)
+  idc        String        @db.VarChar(255)
+  main       Main          @default(no)
+  status     ActiveRemoved @default(active)
+  Customer   Customer?     @relation(fields: [customerId], references: [id])
+  customerId String        @unique
+  User       User?         @relation(fields: [userId], references: [id])
   userId     String?
   SimcardLog SimcardLog[]
 }
@@ -267,7 +267,7 @@ model Supplier {
   address     String        @db.Text
   phone       String        @db.VarChar(255)
   email       String        @db.VarChar(255)
-  status      OkRemoved     @default(ok)
+  status      ActiveRemoved @default(active)
   Order       Order[]
   SupplierLog SupplierLog[]
 }
@@ -289,7 +289,7 @@ model Supply {
   brand       String        @db.VarChar(255)
   type        String        @db.VarChar(255)
   stock       Int?          @default(0)
-  status      OkRemoved     @default(ok)
+  status      ActiveRemoved @default(active)
   EventSupply EventSupply[]
   OrderSupply OrderSupply[]
   SupplyLog   SupplyLog[]
@@ -310,7 +310,7 @@ model Task {
   id               String         @id @default(uuid())
   datetimeDeadline DateTime
   name             String         @db.VarChar(255)
-  status           TaskStatus     @default(ok)
+  status           TaskStatus     @default(active)
   Event            Event?         @relation(fields: [eventId], references: [id])
   eventId          String?
   TaskAssignee     TaskAssignee[]
@@ -329,14 +329,14 @@ model TaskLog {
 }
 
 enum TaskStatus {
-  ok
+  active
   completed
   removed
 }
 
 model TaskAssignee {
   id              String            @id @default(uuid())
-  status          OkRemoved         @default(ok)
+  status          ActiveRemoved     @default(active)
   Task            Task?             @relation(fields: [taskId], references: [id])
   taskId          String?
   User            User?             @relation(fields: [userId], references: [id])
@@ -409,7 +409,7 @@ enum Gender {
 
 enum AccountStatus {
   unverified
-  ok
+  active
   deactivated
   suspended
   removed
@@ -420,7 +420,7 @@ enum Main {
   no
 }
 
-enum OkRemoved {
-  ok
+enum ActiveRemoved {
+  active
   removed
 }

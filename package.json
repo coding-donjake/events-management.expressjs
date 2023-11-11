@@ -2,7 +2,7 @@
   "name": "backend.events-management.expressjs",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
     "prisma:deploy": "npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
