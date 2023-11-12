@@ -24,6 +24,28 @@ const customerCreateController = async (req: Request, res: Response) => {
         content: customer,
       },
     });
+    req.body.email.customerId = customer.id;
+    req.body.email.domain = req.body.email.content.split("@")[1];
+    const email = await prisma.email.create({ data: req.body.email });
+    await prisma.emailLog.create({
+      data: {
+        type: "create",
+        emailId: email.id,
+        operatorId: req.body.decodedToken.id,
+        content: email,
+      },
+    });
+    req.body.simcard.customerId = customer.id;
+    req.body.simcard.idc = "+63";
+    const simcard = await prisma.simcard.create({ data: req.body.simcard });
+    await prisma.simcardLog.create({
+      data: {
+        type: "create",
+        simcardId: simcard.id,
+        operatorId: req.body.decodedToken.id,
+        content: simcard,
+      },
+    });
     res.status(200).json({ id: customer.id });
   } catch (error) {
     console.error(error);

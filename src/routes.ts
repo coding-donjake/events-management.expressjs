@@ -24,6 +24,16 @@ export const paymentGetRoute = "/payment/get";
 export const paymentSelectRoute = "/payment/select";
 export const paymentUpdateRoute = "/payment/update";
 
+export const supplierCreateRoute = "/supplier/create";
+export const supplierGetRoute = "/supplier/get";
+export const supplierSelectRoute = "/supplier/select";
+export const supplierUpdateRoute = "/supplier/update";
+
+export const supplyCreateRoute = "/supply/create";
+export const supplyGetRoute = "/supply/get";
+export const supplySelectRoute = "/supply/select";
+export const supplyUpdateRoute = "/supply/update";
+
 export const taskCreateRoute = "/task/create";
 export const taskGetRoute = "/task/get";
 export const taskSelectRoute = "/task/select";
