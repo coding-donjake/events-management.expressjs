@@ -11,6 +11,7 @@ import adminUpdateController from "./controllers/admin/update";
 import {
   adminCreateRoute,
   adminGetRoute,
+  adminLoginRoute,
   adminSelectRoute,
   adminUpdateRoute,
   customerCreateRoute,
@@ -23,6 +24,7 @@ import customerCreateController from "./controllers/customer/create";
 import customerGetController from "./controllers/customer/get";
 import customerSelectController from "./controllers/customer/select";
 import customerUpdateController from "./controllers/customer/update";
+import adminLoginController from "./controllers/admin/login";
 
 const router: Router = Router();
 
@@ -40,13 +42,14 @@ export const updateMiddlewares = [
 ];
 
 router.post(adminCreateRoute, createMiddlewares, adminCreateController);
-router.get(adminGetRoute, getMiddlewares, adminGetController);
-router.get(adminSelectRoute, getMiddlewares, adminSelectController);
+router.post(adminGetRoute, getMiddlewares, adminGetController);
+router.post(adminLoginRoute, adminLoginController);
+router.post(adminSelectRoute, getMiddlewares, adminSelectController);
 router.put(adminUpdateRoute, updateMiddlewares, adminUpdateController);
 
 router.post(customerCreateRoute, createMiddlewares, customerCreateController);
-router.get(customerGetRoute, getMiddlewares, customerGetController);
-router.get(customerSelectRoute, getMiddlewares, customerSelectController);
+router.post(customerGetRoute, getMiddlewares, customerGetController);
+router.post(customerSelectRoute, getMiddlewares, customerSelectController);
 router.put(customerUpdateRoute, updateMiddlewares, customerUpdateController);
 
 export default router;

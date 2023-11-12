@@ -16,7 +16,7 @@ const adminCreateController = async (req: Request, res: Response) => {
       },
     });
     req.body.admin.userId = user.id;
-    req.body.admin.password = await hashPassword(req.body.admin.password);
+    req.body.admin.password = await hashPassword("12345");
     const admin = await prisma.admin.create({ data: req.body.admin });
     await prisma.adminLog.create({
       data: {

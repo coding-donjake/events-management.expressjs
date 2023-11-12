@@ -17,6 +17,7 @@ export const authenticateAdmin = async (username: string, password: string) => {
           id: true,
           username: true,
           password: true,
+          role: true,
           status: true,
         },
       },
@@ -60,6 +61,7 @@ export const verifyAdmin = async (
     where: { id: req.body.decodedToken.Admin.id },
   });
   if (!admin || admin.status !== "active") {
+    console.log(req.body);
     return res.status(401).send();
   }
   next();

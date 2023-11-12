@@ -7,7 +7,7 @@ const prisma: PrismaClient = new PrismaClient();
 const adminUpdateController = async (req: Request, res: Response) => {
   try {
     if (req.body.user) {
-      prisma.user.update({
+      await prisma.user.update({
         where: { id: req.body.user.id },
         data: req.body.user,
       });
@@ -23,7 +23,7 @@ const adminUpdateController = async (req: Request, res: Response) => {
     if (req.body.admin) {
       if (req.body.admin.password)
         req.body.admin.password = await hashPassword(req.body.admin.password);
-      prisma.admin.update({
+      await prisma.admin.update({
         where: { id: req.body.admin.id },
         data: req.body.admin,
       });
@@ -36,6 +36,7 @@ const adminUpdateController = async (req: Request, res: Response) => {
         },
       });
     }
+    console.log(req.body);
     res.status(200).send();
   } catch (error) {
     console.error(error);

@@ -8,9 +8,12 @@ import taskAssigneeSelectConstant from "../task-assignee/select";
 
 const userSelectConstant: object = {
   id: true,
-  username: true,
-  password: true,
-  status: true,
+  lastName: true,
+  firstName: true,
+  middleName: true,
+  suffix: true,
+  gender: true,
+  birthDate: true,
   Account: { select: accountSelectConstant },
   Admin: { select: adminSelectConstant },
   Customer: { select: customerSelectConstant },
