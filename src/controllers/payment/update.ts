@@ -6,7 +6,7 @@ const prisma: PrismaClient = new PrismaClient();
 const paymentUpdateController = async (req: Request, res: Response) => {
   try {
     if (req.body.payment) {
-      prisma.payment.update({
+      await prisma.payment.update({
         where: { id: req.body.payment.id },
         data: req.body.payment,
       });

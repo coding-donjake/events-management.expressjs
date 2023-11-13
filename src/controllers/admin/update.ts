@@ -21,6 +21,7 @@ const adminUpdateController = async (req: Request, res: Response) => {
       });
     }
     if (req.body.admin) {
+      console.log(req.body);
       if (req.body.admin.password)
         req.body.admin.password = await hashPassword(req.body.admin.password);
       await prisma.admin.update({

@@ -6,7 +6,7 @@ const prisma: PrismaClient = new PrismaClient();
 const customerUpdateController = async (req: Request, res: Response) => {
   try {
     if (req.body.user) {
-      prisma.user.update({
+      await prisma.user.update({
         where: { id: req.body.user.id },
         data: req.body.user,
       });
@@ -20,7 +20,7 @@ const customerUpdateController = async (req: Request, res: Response) => {
       });
     }
     if (req.body.customer) {
-      prisma.customer.update({
+      await prisma.customer.update({
         where: { id: req.body.customer.id },
         data: req.body.customer,
       });

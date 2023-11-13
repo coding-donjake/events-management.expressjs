@@ -6,7 +6,7 @@ const prisma: PrismaClient = new PrismaClient();
 const eventUpdateController = async (req: Request, res: Response) => {
   try {
     if (req.body.event) {
-      prisma.event.update({
+      await prisma.event.update({
         where: { id: req.body.event.id },
         data: req.body.event,
       });

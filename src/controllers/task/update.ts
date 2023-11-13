@@ -6,7 +6,7 @@ const prisma: PrismaClient = new PrismaClient();
 const taskUpdateController = async (req: Request, res: Response) => {
   try {
     if (req.body.task) {
-      prisma.task.update({
+      await prisma.task.update({
         where: { id: req.body.task.id },
         data: req.body.task,
       });

@@ -18,6 +18,10 @@ import {
   customerGetRoute,
   customerSelectRoute,
   customerUpdateRoute,
+  orderCreateRoute,
+  orderGetRoute,
+  orderSelectRoute,
+  orderUpdateRoute,
   supplierCreateRoute,
   supplierGetRoute,
   supplierSelectRoute,
@@ -41,6 +45,10 @@ import supplyCreateController from "./controllers/supply/create";
 import supplyGetController from "./controllers/supply/get";
 import supplySelectController from "./controllers/supply/select";
 import supplyUpdateController from "./controllers/supply/update";
+import orderCreateController from "./controllers/order/create";
+import orderGetController from "./controllers/order/get";
+import orderSelectController from "./controllers/order/select";
+import orderUpdateController from "./controllers/order/update";
 
 const router: Router = Router();
 
@@ -72,6 +80,11 @@ router.post(customerCreateRoute, createMiddlewares, customerCreateController);
 router.post(customerGetRoute, getMiddlewares, customerGetController);
 router.post(customerSelectRoute, getMiddlewares, customerSelectController);
 router.put(customerUpdateRoute, updateMiddlewares, customerUpdateController);
+
+router.post(orderCreateRoute, createMiddlewares, orderCreateController);
+router.post(orderGetRoute, getMiddlewares, orderGetController);
+router.post(orderSelectRoute, getMiddlewares, orderSelectController);
+router.put(orderUpdateRoute, updateMiddlewares, orderUpdateController);
 
 router.post(supplierCreateRoute, createMiddlewares, supplierCreateController);
 router.post(supplierGetRoute, getMiddlewares, supplierGetController);
