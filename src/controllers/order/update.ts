@@ -45,18 +45,9 @@ const orderUpdateController = async (req: Request, res: Response) => {
     }
     for (let i = 0; i < req.body.orderSupply.length; i++) {
       const element = req.body.orderSupply[i];
-      let supply = await prisma.supply.update({
+      await prisma.supply.update({
         where: { id: element.supplyId },
         data: { stock: { increment: element.quantity } },
-        select: supplySelectConstant,
-      });
-      await prisma.supplyLog.create({
-        data: {
-          type: "update",
-          supplyId: element.supplyId,
-          operatorId: req.body.decodedToken.id,
-          content: supply,
-        },
       });
     }
     res.status(200).send();

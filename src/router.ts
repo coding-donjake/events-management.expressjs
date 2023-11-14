@@ -26,6 +26,10 @@ import {
   orderGetRoute,
   orderSelectRoute,
   orderUpdateRoute,
+  paymentCreateRoute,
+  paymentGetRoute,
+  paymentSelectRoute,
+  paymentUpdateRoute,
   supplierCreateRoute,
   supplierGetRoute,
   supplierSelectRoute,
@@ -57,6 +61,10 @@ import eventCreateController from "./controllers/event/create";
 import eventGetController from "./controllers/event/get";
 import eventSelectController from "./controllers/event/select";
 import eventUpdateController from "./controllers/event/update";
+import paymentCreateController from "./controllers/payment/create";
+import paymentGetController from "./controllers/payment/get";
+import paymentSelectController from "./controllers/payment/select";
+import paymentUpdateController from "./controllers/payment/update";
 
 const router: Router = Router();
 
@@ -98,6 +106,11 @@ router.post(orderCreateRoute, createMiddlewares, orderCreateController);
 router.post(orderGetRoute, getMiddlewares, orderGetController);
 router.post(orderSelectRoute, getMiddlewares, orderSelectController);
 router.put(orderUpdateRoute, updateMiddlewares, orderUpdateController);
+
+router.post(paymentCreateRoute, createMiddlewares, paymentCreateController);
+router.post(paymentGetRoute, getMiddlewares, paymentGetController);
+router.post(paymentSelectRoute, getMiddlewares, paymentSelectController);
+router.put(paymentUpdateRoute, updateMiddlewares, paymentUpdateController);
 
 router.post(supplierCreateRoute, createMiddlewares, supplierCreateController);
 router.post(supplierGetRoute, getMiddlewares, supplierGetController);

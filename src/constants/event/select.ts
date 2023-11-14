@@ -14,7 +14,45 @@ const eventSelectConstant: object = {
   price: true,
   balance: true,
   status: true,
-  Customer: { select: customerSelectConstant },
+  Customer: {
+    select: {
+      id: true,
+      address: true,
+      status: true,
+      Email: {
+        select: {
+          id: true,
+          content: true,
+          domain: true,
+          main: true,
+          status: true,
+        },
+      },
+      Simcard: {
+        select: {
+          id: true,
+          content: true,
+          idc: true,
+          main: true,
+          status: true,
+          Customer: { select: customerSelectConstant },
+          SimcardLog: logConstant,
+        },
+      },
+      User: {
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          middleName: true,
+          suffix: true,
+          gender: true,
+          birthDate: true,
+        },
+      },
+      CustomerLog: logConstant,
+    },
+  },
   EventSupply: { select: eventSupplySelectConstant },
   Payment: { select: paymentSelectConstant },
   Task: { select: taskSelectConstant },

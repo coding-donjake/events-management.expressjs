@@ -14,6 +14,12 @@ const paymentCreateController = async (req: Request, res: Response) => {
         content: payment,
       },
     });
+    await prisma.event.update({
+      where: { id: payment.eventId! },
+      data: {
+        balance: { decrement: payment.amount },
+      },
+    });
     res.status(200).json({ id: payment.id });
   } catch (error) {
     console.error(error);
