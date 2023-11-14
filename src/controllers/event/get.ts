@@ -45,10 +45,12 @@ const eventGetController = async (req: Request, res: Response) => {
                       ],
                     }
                   : {},
-                req.body.status ? { status: req.body.status } : {},
+                req.body.status
+                  ? { status: req.body.status }
+                  : { status: { not: "removed" } },
               ],
             }
-          : {},
+          : { status: { not: "removed" } },
       orderBy: eventOrderByConstant,
       select: eventSelectConstant,
     });
